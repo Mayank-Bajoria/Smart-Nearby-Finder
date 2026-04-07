@@ -135,3 +135,39 @@ function fetchAndShowPlaces(searchWord) {
       resultsBox.innerHTML = "<p>Error: Could not load data.</p>";
     });
 }
+
+// ==========================================
+// ====== CATEGORY FILTER REQUIREMENT ======
+// Assumes HTML has <select id="category-filter"> and <div id="results">
+// ==========================================
+var categoryFilter = document.getElementById("category-filter");
+var resultsContainer = document.getElementById("results");
+
+// Only run if these elements exist to prevent errors
+if (categoryFilter && resultsContainer) {
+  categoryFilter.addEventListener("change", function(event) {
+    var selectedCategory = event.target.value.toLowerCase();
+
+    // 1. Use filter() to get only places matching the category
+    var filteredData = fetchedData.filter(function(place) {
+      // Show all if 'all' is selected, otherwise match type
+      if (selectedCategory === "all") {
+        return true;
+      } else {
+        return place.type === selectedCategory;
+      }
+    });
+
+    // 2. Use map() to transform object array into HTML string array
+    var htmlElements = filteredData.map(function(place) {
+      return "<div class='place-card'><strong>Found: </strong>" + place.display_name + "</div>";
+    });
+
+    // 3. Display the results dynamically by joining the HTML array
+    if (htmlElements.length > 0) {
+      resultsContainer.innerHTML = htmlElements.join("");
+    } else {
+      resultsContainer.innerHTML = "<p>No places found for this category.</p>";
+    }
+  });
+}
