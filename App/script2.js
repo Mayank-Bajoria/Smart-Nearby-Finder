@@ -9,11 +9,15 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // We will use this array to keep track of map pins (markers) so we can clear them later
 var mapMarkers = [];
+// This array holds our fetched data so we can use filter on it later
+var fetchedData = [];
 
 // ====== SELECT ELEMENTS ======
 var searchBtn = document.getElementById("search-btn");
 var searchInput = document.getElementById("location-search");
 var resultsBox = document.getElementById("results-list"); 
+var filterInput = document.getElementById("filter-input");
+var filterRow = document.getElementById("filter-row");
 
 // ====== SEARCH BUTTON EVENT ======
 searchBtn.addEventListener("click", function () {
@@ -30,12 +34,64 @@ searchBtn.addEventListener("click", function () {
 // Select all buttons that have the class 'cat-btn' (Hospitals, Banks etc.)
 var categoryButtons = document.querySelectorAll(".cat-btn");
 
-// Loop through each category button and add a click event
-for (var i = 0; i < categoryButtons.length; i++) {
-  categoryButtons[i].addEventListener("click", function() {
+// Use array forEach instead of a for loop
+Array.from(categoryButtons).forEach(function(button) {
+  button.addEventListener("click", function() {
     // Get the category name from 'data-type' attribute in HTML
     var categoryName = this.getAttribute("data-type");
     fetchAndShowPlaces(categoryName);
+  });
+});
+
+// ====== FILTER DIRECTLY ON RESULTS ======
+// Listen for user typing in the filter box
+filterInput.addEventListener("input", function(event) {
+  var typedWord = event.target.value.toLowerCase();
+  
+  // Use filter() to find matching items from our fetched data
+  var matchingResults = fetchedData.filter(function(place) {
+    var placeName = place.display_name.toLowerCase();
+    return placeName.includes(typedWord);
+  });
+  
+  // Show the matching results dynamically
+  var currentSearch = searchInput.value || "Filtered";
+  displayPlaces(matchingResults, currentSearch);
+});
+
+// ====== FUNCTION TO DISPLAY PLACES ======
+function displayPlaces(placesArray, searchWord) {
+  resultsBox.innerHTML = "";
+
+  // Remove old markers using array forEach (no for loop)
+  mapMarkers.forEach(function(marker) {
+    map.removeLayer(marker);
+  });
+  mapMarkers = [];
+
+  if (placesArray.length === 0) {
+    resultsBox.innerHTML = "<p>No results match your filter.</p>";
+    return;
+  }
+
+  // Use array forEach to show place list and map markers (no for loop)
+  placesArray.forEach(function(place) {
+    var placeName = place.display_name;
+    var placeLat = place.lat;
+    var placeLon = place.lon;
+    
+    // 1. Create sidebar element
+    var placeElement = document.createElement("div");
+    placeElement.className = "place-card"; 
+    placeElement.innerHTML = "<strong>Found: </strong>" + placeName;
+    placeElement.onclick = function() { map.setView([placeLat, placeLon], 16); };
+
+    resultsBox.appendChild(placeElement);
+
+    // 2. Map marker
+    var marker = L.marker([placeLat, placeLon]).addTo(map);
+    marker.bindPopup("<strong>" + searchWord.toUpperCase() + "</strong><br>" + placeName);
+    mapMarkers.push(marker);
   });
 }
 
@@ -56,11 +112,12 @@ function fetchAndShowPlaces(searchWord) {
       // Clear the loading text
       resultsBox.innerHTML = "";
 
-      // Remove old markers from the map before adding new ones
-      for (var j = 0; j < mapMarkers.length; j++) {
-        map.removeLayer(mapMarkers[j]);
-      }
-      mapMarkers = []; // reset markers list to empty
+      // Save the fetched data to our variable
+      fetchedData = data;
+      
+      // Make the filter input row visible
+      filterRow.style.display = "flex";
+      filterInput.value = ""; // clear old text
 
       // Check if API returned empty data
       if (data.length === 0) {
@@ -68,37 +125,11 @@ function fetchAndShowPlaces(searchWord) {
         return;
       }
 
-      // Loop through the data to show each place in list AND on map
-      for (var k = 0; k < data.length; k++) {
-        var placeName = data[k].display_name;
-        var placeLat = data[k].lat;
-        var placeLon = data[k].lon;
-        
-        // 1. Create a list element for the sidebar
-        var placeElement = document.createElement("div");
-        placeElement.className = "place-card"; 
-        placeElement.innerHTML = "<strong>Found: </strong>" + placeName;
-        // When clicking a place card, move the map there
-        placeElement.onclick = (function(lat, lon) {
-             return function() { map.setView([lat, lon], 16); };
-        })(placeLat, placeLon);
-
-        resultsBox.appendChild(placeElement);
-
-        // 2. Put a pin (marker) on the map for this place
-        var marker = L.marker([placeLat, placeLon]).addTo(map);
-        
-        // Add a small popup text when marker is clicked
-        marker.bindPopup("<strong>" + searchWord.toUpperCase() + "</strong><br>" + placeName);
-        
-        // Save marker in our list so we can remove it next time
-        mapMarkers.push(marker);
-      }
-
-      // Automatically move the map view to the very first result found!
-      if (data.length > 0) {
-        map.setView([data[0].lat, data[0].lon], 13);
-      }
+      // Automatically move the map view to the very first result found
+      map.setView([data[0].lat, data[0].lon], 13);
+      
+      // Display the fetched places
+      displayPlaces(fetchedData, searchWord);
     })
     .catch(function (error) {
       resultsBox.innerHTML = "<p>Error: Could not load data.</p>";
