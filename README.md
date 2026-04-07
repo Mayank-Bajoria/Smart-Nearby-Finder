@@ -35,12 +35,11 @@ This project demonstrates practical implementation of JavaScript concepts such a
 * Filter results by categories:
 
   * Hospitals
-  * Restaurants
   * Hotels
-  * ATMs
+  * Bank
   * Schools
   * Medical Stores
-  * Public Restrooms
+  
 
 ### ⭐ Sorting Options
 
@@ -63,11 +62,6 @@ This project demonstrates practical implementation of JavaScript concepts such a
 
 * Toggle between light and dark theme
 
-### ❤️ Favorites (Optional)
-
-* Save and view favorite places using Local Storage
-
----
 
 ## 🔌 API Integration
 
@@ -87,8 +81,8 @@ This project demonstrates practical implementation of JavaScript concepts such a
 
 ### Frontend
 
-* HTML5
-* CSS3 / Tailwind CSS / Bootstrap
+* HTML
+* CSS
 * JavaScript (ES6+)
 
 ### Core Concepts
@@ -116,22 +110,8 @@ Smart-Nearby-Finder/
 ├── css/
 │   └── styles.css
 │
-├── js/
-│   ├── app.js            # Main logic
-│   ├── api.js            # API calls
-│   ├── ui.js             # DOM rendering
-│   ├── utils.js          # Helper functions
-│
-├── assets/
-│   ├── icons/
-│   ├── images/
-│
 ├── config/
-│   └── config.js         # API keys (hidden in real projects)
-│
-└── components/ (optional if advanced)
-    ├── navbar.js
-    ├── card.js
+│   └── config.js         # API keys (hidden in real projects
 ```
 
 ---
@@ -235,24 +215,8 @@ const API_KEY = "YOUR_API_KEY";
 
 ---
 
-## 📸 Screenshots
-
-(Add screenshots here after UI is ready)
-
----
-
-## 🌐 Live Demo
-
-(Add deployed link here)
-
----
 
 ## 🙌 Author
 
 * Mayank Bajoria
 
----
-
-## 📜 License
-
-This project is for educational purposes only.
