@@ -67,9 +67,8 @@ This project demonstrates practical implementation of JavaScript concepts such a
 
 ### Primary API
 
-* Google Maps Places API
-  OR
-* Foursquare Places API
+ OpenStreetMap Nominatim API 
+ (https://nominatim.openstreetmap.org)
 
 ### Additional APIs (Optional)
 
