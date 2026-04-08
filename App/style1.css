@@ -511,3 +511,50 @@ body {
     font-size: 12px;
     color: #6b7280;
 }
+
+/* ── Responsive (Mobile) ──────────────────────────── */
+@media (max-width: 768px) {
+
+    .header {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 15px;
+    }
+
+    .search-bar {
+        max-width: 100%;
+        order: 3;
+        flex-basis: 100%;
+    }
+
+    /* Hide "My Location" text on small screens, keep icon only */
+    .header-right span {
+        display: none;
+    }
+
+    .main-content {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: 40vh;
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .map-section {
+        height: 60vh;
+    }
+
+    .modal-card {
+        width: 92vw;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+    /* Hide footer on small screens to save space */
+    .footer {
+        display: none;
+    }
+}
