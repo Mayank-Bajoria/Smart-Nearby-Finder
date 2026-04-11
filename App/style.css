@@ -201,7 +201,6 @@ body {
     background: #f5f3ff;
 }
 
-/* --- SCRIPT 1 CARD STYLES --- */
 .card-header {
     display: flex;
     align-items: center;
@@ -323,7 +322,6 @@ body {
     background: #e5e7eb;
 }
 
-/* --- SCRIPT 1 MODAL STYLES --- */
 .modal-backdrop {
     position: fixed;
     inset: 0;

@@ -1,5 +1,5 @@
 /* ====================================================
-   Smart Place Finder – Main JavaScript File
+   Smart Nearby Finder – Main JavaScript
    Uses Leaflet.js for the map and Nominatim API
    (OpenStreetMap) to search for nearby places.
    ==================================================== */
@@ -46,31 +46,26 @@ var categories = {
         label: "Hospitals",
         icon: "fa-hospital",
         color: "#ef4444",
-        tag: 'amenity="hospital"',
     },
     bank: {
         label: "Banks",
         icon: "fa-building-columns",
         color: "#3b82f6",
-        tag: 'amenity="bank"',
     },
     hotel: {
         label: "Hotels",
         icon: "fa-hotel",
         color: "#a855f7",
-        tag: 'tourism="hotel"',
     },
     pharmacy: {
         label: "Pharmacies",
         icon: "fa-pills",
         color: "#10b981",
-        tag: 'amenity="pharmacy"',
     },
     school: {
         label: "Schools",
         icon: "fa-school",
         color: "#f59e0b",
-        tag: 'amenity="school"',
     },
 };
 
@@ -317,8 +312,6 @@ async function searchLocation() {
         showToast("Search failed", "error");
     }
 }
-
-
 
 /* ── API Fetching ─────────────────────────────────────── */
 
